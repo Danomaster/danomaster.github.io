@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Stolen</title>
+    <style>
+        :root {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            --animDur: 0.5s;
+        }
+
+        .cool {
+            -webkit-text-size-adjust: 100%;
+            --gradient-01: #d900ab;
+            --gradient-02: #5b3ef9;
+            --gradient-03: #199cf5;
+
+            font-family: Inter, sans-serif;
+            background-image: linear-gradient(100deg, var(--gradient-01), var(--gradient-02) 48%, var(--gradient-03));
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            font-size: 40px;
+            line-height: 50px;
+        }
+
+        #newTxtDiv {
+            display: flex;
+            background-color: aquamarine;
+        }
+
+        #newTxtDiv>h1 {
+            position: relative;
+            /* background-color: #d900ab; */
+            margin: 2px;
+        }
+
+        #newTxtDiv>h1>span {
+            position: relative;
+            /* background-color: #00d904; */
+            margin: 2px;
+            /* transition:all 0.2s; */
+            /* animation: jumpUp 1s; */
+            /* animation-iteration-count: infinite; */
+
+
+        }
+
+        @keyframes jumpUp {
+            from {
+                top: 0px;
+                
+            }
+
+            50% {
+                top: -50px;
+                color:rgb(159, 159, 0)
+            }
+
+            to {
+                top: 0px;
+            }
+        }
+
+        .animate {
+            animation: jumpUp;
+            animation-duration: var(--animDur);
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>element 1</h1>
+        <p>cool man</p>
+    </div>
+
+    <h1 class="cool" style="width: 5em;">
+        yeah man it's super duper cool
+    </h1>
+
+    <label for="inpNewText">try out your text!! -></label>
+    <input id="inpNewText" value="super duper cool" />
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div id="newTxtDiv">
+        <!-- <h1 ><span style="top:-50px">test</span></h1> -->
+    </div>
+    <p>try hover your mouse over those funky letters ^ !!</p>
+    <form oninput="handleForm(this)">
+        <label for="a">Animation Duration:</label>
+        <input id="a" type="range" min="0" max="3" step="0.01" value="0.5" />
+        <output name="test" for="a">0.5</output>
+    </form>
+
+    <script>
+        const root = document.documentElement;
+        function handleForm(e) {
+            console.log(e);
+            let val = parseFloat(e.a.value)
+            e.test.value = val;
+
+            root.style.setProperty('--animDur', `${val}s`)
+        }
+
+        const inpNewTxt = document.getElementById('inpNewText');
+
+
+        inpNewTxt.addEventListener('input', (e) => {
+            changedText();
+        })
+        changedText();
+
+        function changedText() {
+            initText(inpNewTxt.value);
+        }
+
+        function initText(txt = "untitled") {
+            const txtDiv = document.getElementById('newTxtDiv');
+
+            // clear div of children
+            txtDiv.innerHTML = "";
+
+            for (let i = 0; i < txt.length; i++) {
+                const lt = txt[i];
+
+                // create element
+                const t = document.createElement('h1');
+                // create span inside
+                const tSpan = document.createElement('span');
+                if (lt == ' ') {
+                    tSpan.innerHTML = '&nbsp;'
+                }
+                else {
+                    tSpan.innerText = lt;
+                }
+
+                t.appendChild(tSpan)
+
+                // events
+                t.addEventListener('mouseover', (thi) => {
+
+                    const el = thi.currentTarget.firstChild;
+
+                    // el.classList.remove('animate'); // reset animation
+                    // void el.offsetWidth; // trigger reflow
+                    el.classList.add('animate'); // start animation
+
+                    el.addEventListener('animationend', (event) => {
+                        event.srcElement.classList.remove('animate');
+                    })
+
+                    // el.style.top = '-50px';
+                });
+                t.addEventListener('mouseleave', (thi) => {
+                    const el = thi.currentTarget.firstChild;
+                    // el.style.top = '0px';
+                });
+
+                // append to div
+                txtDiv.appendChild(t);
+            }
+        }
+        // made by dan :)
+        // 2024-03-21 in the early hours of the morning
+    </script>
+</body>
+
+</html>
